@@ -12,6 +12,7 @@ import { IRecipe } from '../shared/IRecipe';
 export class PostRecipesComponent implements OnInit {
 
   form!: FormGroup;
+  recipes!: IRecipe[];
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -53,7 +54,7 @@ export class PostRecipesComponent implements OnInit {
       }))
       .subscribe({
         next: (responseArray) => {
-          console.log(responseArray);
+          this.recipes = responseArray;
         }
       })
   }
