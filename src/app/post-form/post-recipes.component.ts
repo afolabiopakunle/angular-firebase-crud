@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
+import { IRecipe } from '../shared/IRecipe';
 
 @Component({
   selector: 'app-post-recipes',
@@ -15,6 +17,7 @@ export class PostRecipesComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    this.getRecipes();
   }
 
   buildForm() {
@@ -35,6 +38,24 @@ export class PostRecipesComponent implements OnInit {
         }
       })
     this.form.reset()
+  }
+
+  getRecipes() {
+    this.http.get('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json')
+      .pipe(map((responseData: any) => {
+        const responseArray: IRecipe[] = [];
+        for(const key in responseData) {
+          if(responseData.hasOwnProperty(key)) {
+            responseArray.push({...responseData[key as keyof IRecipe], id: key})
+          }
+        }
+        return responseArray;
+      }))
+      .subscribe({
+        next: (responseArray) => {
+          console.log(responseArray);
+        }
+      })
   }
 
 }
