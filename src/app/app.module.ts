@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PostFormComponent } from './post-form/post-form.component';
+import { PostRecipesComponent } from './post-form/post-recipes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostFormComponent
+    PostRecipesComponent
   ],
   imports: [
     BrowserModule,

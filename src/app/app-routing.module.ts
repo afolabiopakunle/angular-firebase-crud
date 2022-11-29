@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PostFormComponent } from './post-form/post-form.component';
+import { PostRecipesComponent } from './post-form/post-recipes.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'make-post', pathMatch: 'full'},
-  { path: 'make-post', component: PostFormComponent }
+  { path: '', redirectTo: 'post-recipes', pathMatch: 'full'},
+  { path: 'post-recipes', component: PostRecipesComponent }
 ];
 
 @NgModule({
