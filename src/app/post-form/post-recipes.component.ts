@@ -41,16 +41,7 @@ export class PostRecipesComponent implements OnInit {
   }
 
   getRecipes() {
-    this.http.get('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json')
-      .pipe(map((responseData: any) => {
-        const responseArray: IRecipe[] = [];
-        for(const key in responseData) {
-          if(responseData.hasOwnProperty(key)) {
-            responseArray.push({...responseData[key as keyof IRecipe], id: key})
-          }
-        }
-        return responseArray;
-      }))
+      this.postService.getRecipes()
       .subscribe({
         next: (responseArray) => {
           this.recipes = responseArray;
