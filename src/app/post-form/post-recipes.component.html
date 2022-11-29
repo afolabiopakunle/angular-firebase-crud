@@ -15,8 +15,20 @@
   </div>
 
   <div class="py-3 col-md-8">
-    <ul class="list-group">
+    <ul class="list-group" *ngIf="isLoading">
+      <li class="list-group-item">Loading recipes...</li>
+    </ul>
+
+    <ul class="list-group" *ngIf="!isLoading">
       <li class="list-group-item" *ngFor="let recipe of recipes"> <strong> {{ recipe.title }} </strong> <br> {{ recipe.content }}</li>
+    </ul>
+
+    <ul class="list-group" *ngIf="!errorMessage && recipes.length < 1 && !isLoading">
+      <li class="list-group-item border-warning">No recipes available...</li>
+    </ul>
+
+    <ul class="list-group" *ngIf="!isLoading && errorMessage">
+      <li class="list-group-item border-danger">{{ errorMessage }}</li>
     </ul>
   </div>
 </div>

@@ -14,9 +14,10 @@ export class PostRecipesComponent implements OnInit {
 
   form!: FormGroup;
   recipes!: IRecipe[];
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private fb: FormBuilder,
-              private http: HttpClient,
               private postService: PostService,
               ) { }
 
@@ -37,15 +38,27 @@ export class PostRecipesComponent implements OnInit {
   submit() {
     console.log(this.form.value);
     this.postService.postRecipe(this.form.value)
-    this.form.reset()
+      .subscribe({
+        next: (response) => {
+          this.getRecipes();
+        }
+      })
+    this.form.reset();
+    // this.getRecipes();
   }
 
   getRecipes() {
+    this.isLoading = true;
       this.postService.getRecipes()
       .subscribe({
         next: (responseArray) => {
+          this.isLoading = false
           this.recipes = responseArray;
-        }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.message
+    }
       })
   }
 
