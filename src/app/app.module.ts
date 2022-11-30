@@ -7,6 +7,7 @@ import { PostRecipesComponent } from './post-form/post-recipes.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptorService } from './auth-interceptor.service';
+import { LoginInterceptor } from './login-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,10 @@ import { AuthInterceptorService } from './auth-interceptor.service';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoginInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
