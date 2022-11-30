@@ -16,6 +16,7 @@ export class PostRecipesComponent implements OnInit, OnDestroy {
   recipes: IRecipe[] = [];
   isLoading = false;
   errorSubscription!: Subscription;
+  isLoadingSubscription!: Subscription;
   errorMessage = '';
 
   constructor(private fb: FormBuilder,
@@ -25,9 +26,11 @@ export class PostRecipesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     this.getRecipes();
+
     this.errorSubscription = this.postService.errorMessage.subscribe(errorMessage => {
       this.errorMessage = errorMessage;
     })
+
   }
 
   buildForm() {
@@ -49,13 +52,13 @@ export class PostRecipesComponent implements OnInit, OnDestroy {
     this.isLoading = true;
       this.postService.getRecipes()
       .subscribe({
-        next: (responseArray) => {
+        next: (responseArray)=> {
           this.isLoading = false
+          // @ts-ignore
           this.recipes = responseArray;
         },
         error: (err) => {
           this.isLoading = false;
-          // this.errorMessage = err.message
     }
       })
   }

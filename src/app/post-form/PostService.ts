@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Subject } from 'rxjs';
+import { catchError, map, Subject } from 'rxjs';
 import { IRecipe } from '../shared/IRecipe';
 
 @Injectable({providedIn: 'root'})
@@ -19,13 +19,16 @@ export class PostService {
            this.getRecipes();
          },
          error: (err) => {
-           this.errorMessage.next(err.message)
+           catchError(error => {
+             this.errorMessage.next(err.message)
+             return error;
+           })
          }
        });
   }
 
   getRecipes() {
-    return this.http.get('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json')
+    return this.http.get<IRecipe[]>('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json')
       .pipe(map((responseData: any) => {
         const responseArray: IRecipe[] = [];
         for(const key in responseData) {
@@ -34,7 +37,11 @@ export class PostService {
           }
         }
         return responseArray;
-      }))
+      }),
+        catchError(error => {
+          this.errorMessage.next(error.message)
+          return error
+        }))
   }
 
   deleteRecipes() {
