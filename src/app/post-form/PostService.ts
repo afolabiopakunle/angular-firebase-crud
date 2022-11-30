@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Subject } from 'rxjs';
 import { IRecipe } from '../shared/IRecipe';
 
@@ -28,7 +28,11 @@ export class PostService {
   }
 
   getRecipes() {
-    return this.http.get<IRecipe[]>('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json')
+    return this.http.get<IRecipe[]>('https://angular-update-af322-default-rtdb.firebaseio.com/recipes.json', {
+      headers: new HttpHeaders({
+        "custom-head-lead": "afolabi-opakunle"
+      })
+    })
       .pipe(map((responseData: any) => {
         const responseArray: IRecipe[] = [];
         for(const key in responseData) {
