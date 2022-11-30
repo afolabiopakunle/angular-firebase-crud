@@ -78,6 +78,9 @@
             "browserTarget": "angular-update:build"
           }
         },
+        "options": {
+          "disableHostCheck": true,
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {

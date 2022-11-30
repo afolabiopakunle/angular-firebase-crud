@@ -14,13 +14,25 @@
     </form>
   </div>
 
+  <div class="py-3">
+    <button (click)="deleteRecipes()" class="btn btn-danger">Delete All</button>
+  </div>
   <div class="py-3 col-md-8">
     <ul class="list-group" *ngIf="isLoading">
       <li class="list-group-item">Loading recipes...</li>
     </ul>
 
     <ul class="list-group" *ngIf="!isLoading">
-      <li class="list-group-item" *ngFor="let recipe of recipes"> <strong> {{ recipe.title }} </strong> <br> {{ recipe.content }}</li>
+      <li class="list-group-item" *ngFor="let recipe of recipes">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+        <strong> {{ recipe.title }} </strong> <br>
+        {{ recipe.content }}
+          </div>
+          <div>
+<!--            <button (click)="deleteRecipe(recipe.id)" class="btn btn-danger">Delete</button>-->
+          </div>
+        </div>  </li>
     </ul>
 
     <ul class="list-group" *ngIf="!errorMessage && recipes.length < 1 && !isLoading">
@@ -30,6 +42,8 @@
     <ul class="list-group" *ngIf="!isLoading && errorMessage">
       <li class="list-group-item border-danger">{{ errorMessage }}</li>
     </ul>
+
   </div>
+
 </div>
 

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { IRecipe } from '../shared/IRecipe';
 import { PostService } from './PostService';
 
@@ -10,11 +10,12 @@ import { PostService } from './PostService';
   templateUrl: './post-recipes.component.html',
   styleUrls: ['./post-recipes.component.css']
 })
-export class PostRecipesComponent implements OnInit {
+export class PostRecipesComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
-  recipes!: IRecipe[];
+  recipes: IRecipe[] = [];
   isLoading = false;
+  errorSubscription!: Subscription;
   errorMessage = '';
 
   constructor(private fb: FormBuilder,
@@ -24,6 +25,9 @@ export class PostRecipesComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
     this.getRecipes();
+    this.errorSubscription = this.postService.errorMessage.subscribe(errorMessage => {
+      this.errorMessage = errorMessage;
+    })
   }
 
   buildForm() {
@@ -38,13 +42,7 @@ export class PostRecipesComponent implements OnInit {
   submit() {
     console.log(this.form.value);
     this.postService.postRecipe(this.form.value)
-      .subscribe({
-        next: (response) => {
-          this.getRecipes();
-        }
-      })
     this.form.reset();
-    // this.getRecipes();
   }
 
   getRecipes() {
@@ -57,9 +55,21 @@ export class PostRecipesComponent implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = err.message
+          // this.errorMessage = err.message
     }
       })
+  }
+
+  deleteRecipes() {
+    this.postService.deleteRecipes()
+      .subscribe(() => {
+        this.recipes = [];
+      })
+
+  }
+
+  ngOnDestroy() {
+    this.errorSubscription.unsubscribe();
   }
 
 }
